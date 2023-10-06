@@ -6,22 +6,27 @@ import { SlimLayout } from '@/components/SlimLayout'
 import axios from "axios";
 import {useState} from "react";
 import {useForm} from "react-hook-form";
+import {useRouter} from "next/navigation";
 export default function Register() {
+
+  const router = useRouter();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const { register, handleSubmit } = useForm();
 
+  const handleRegister = async (input) => {
+    let name = input.username
+    let pwd = input.password
 
-  const handleRegister = async () => {
     try {
       const response = await axios.post('http://localhost:3001/register', {
-        username,
-        password,
+        username: name,
+        password: pwd,
       });
-
-      console.log('提交注册 ', response.data); // 处理服务器响应
+      console.log('注册成功 ', response.data); // 处理服务器响应
+      router.push("/auth/login")
     } catch (error) {
       console.error(error);
     }
