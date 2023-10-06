@@ -1,6 +1,6 @@
 # Cyberfunding Web
 
-Using **next.js + tailwind css + typescript**
+Using **next.js + react + tailwind css + typescript**
 
 ## Dev Environment Prep
 
