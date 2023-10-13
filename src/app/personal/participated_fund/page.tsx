@@ -1,7 +1,13 @@
+"use client";
 import {Header} from "@/components/Header";
 import {Footer} from "@/components/Footer";
 import { FundList } from '@/components/FundList';
 import Link from "next/link";
+import {useRouter} from "next/navigation";
+import {useSelector} from "react-redux";
+import User from "@/interfaces/User";
+import {useEffect} from "react";
+import user from "@/interfaces/User";
 
 const tabs = [
   { name: 'Profile', href: '/personal/profile', current: false },
@@ -15,14 +21,34 @@ function classNames(...classes: string[]) {
 
 export default function ParticipatedFundPage() {
 
-  var name = "Your Name";
+    const router = useRouter();
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    // const isLoggedIn = useSelector((state) => state.isLoggedIn);
+    const currentUser = localStorage.getItem('username');
+    // const currentUser: User = useSelector((state) => state.user);
+
+    const username = currentUser || ''
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push('/auth/login')
+    }
+    // 在组件加载后执行副作用操作
+    console.log('组件加载完成');
+
+    // 如果有清理操作，可以在返回的函数中进行
+    return () => {
+      console.log('组件卸载');
+      // 进行清理操作，如取消网络请求、取消订阅等
+    };
+  }, []);
 
   return (
     <>
       <Header />
         <div className="border-b border-gray-200 mx-auto flex max-w-lg">
           <div className="sm:flex sm:items-baseline">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">{name}</h3>
+            <h3 className="text-base font-semibold leading-6 text-gray-900">{username}</h3>
             <div className="mt-4 sm:ml-10 sm:mt-0">
               <nav className="-mb-px flex space-x-8">
                 {tabs.map((tab) => (
@@ -45,8 +71,11 @@ export default function ParticipatedFundPage() {
           </div>
         </div>
 
-        <main className="py-10 mx-auto flex">
-          <FundList/>
+        <main className="py-10 mx-auto flex-row">
+          <div className="flex items-center justify-center">
+                <h5 className=" text-xl font-bold tracking-tight text-gray-900 sm:text-xl">Participated Fund</h5>
+            </div>
+          <FundList isSelf={true} type={2}/>
         </main>
 
       <Footer />

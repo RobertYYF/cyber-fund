@@ -30,9 +30,15 @@ export default function Login() {
         username: name,
         password: pwd,
       });
+      const token = response.data.token;
+      // 将令牌存储在本地
+      localStorage.setItem('token', token);
+      // 临时方案，用localStorage存登录状态
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('username', name)
       let user: User = {
         username: name,
-        address: '' // TODO: 替换为钱包地址
+        address: ''
       }
       dispatch(login());
       dispatch(setUserAction(user));

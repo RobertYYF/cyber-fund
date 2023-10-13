@@ -1,24 +1,26 @@
 'use client';
 import {Button} from "@/components/Button";
 import {useContext, useEffect, useState} from "react";
-import axios from 'axios';
+import api from '@/services/apiservice';
 import FundDetail from '@/interfaces/FundDetail';
 import {useRouter} from "next/router";
 import {useSearchParams} from "next/navigation";
 import {FundDetailContext} from "@/contexts/FundContext";
 import Link from "next/link";
+import axios, {AxiosRequestConfig} from "axios";
+import {formatDate} from "@/tools/stringformat";
 
 const mockData: FundDetail = {
-  id: 0,
+  projectId: 0,
   category: 'Category Test',
-  author: 'Author Test',
-  title: '众筹Title Test',
+  projectOwner: 'Author Test',
+  projectName: '众筹Title Test',
   intro: 'Introduction Test',
-  content: 'Content Test Paragraph 1 \n Paragraph 2 \n Paragraph 3 \n',
-  start: 'Sep 20, 2023',
-  end: 'Sep 30, 2023',
+  projectDescription: 'Content Test Paragraph 1 \n Paragraph 2 \n Paragraph 3 \n',
+  startTime: 0,
+  deadline: 0,
   raised_fund: 0,
-  target_fund: 1000
+  projectGoal: 1000
 }
 
 export function FundDetailComponent() {
@@ -26,8 +28,7 @@ export function FundDetailComponent() {
   const [fundDetailData, setFundDetailData] = useState<FundDetail | null>(null);
 
   const queryParams = useSearchParams()
-  const fundDetailStr = queryParams.get('detail')
-  const parsedFundDetail = fundDetailStr ? JSON.parse(decodeURIComponent(fundDetailStr)) : null;
+  const projectId = queryParams.get('projectId') || ''
 
   const updateElement = (data: FundDetail) => {
     setFundDetailData(data);
@@ -46,9 +47,9 @@ export function FundDetailComponent() {
   };
 
   const stats = [
-    { label: 'Name', value: fundDetailData?.author || '' },
-    { label: 'Start', value: fundDetailData?.start || '' },
-    { label: 'End', value: fundDetailData?.end || '' },
+    { label: 'Name', value: fundDetailData?.projectOwner || '' },
+    { label: 'Start', value: formatDate(fundDetailData?.startTime || 0) },
+    { label: 'End', value: formatDate(fundDetailData?.deadline || 0) },
     { label: 'Raised', value: fundDetailData?.raised_fund || 0 },
   ]
 
@@ -58,12 +59,18 @@ export function FundDetailComponent() {
 
     const fetchData = async () => {
       try {
-        // 发起 API 请求
-        const response = await axios.get<FundDetail>('https://获取FundDetail的API',{
-        cancelToken: cancelTokenSource.token, // 将取消令牌传递给请求配置
-      });
+          const params = {
+            projectId: projectId,
+          };
+          const config: AxiosRequestConfig = {
+            cancelToken: cancelTokenSource.token,
+          };
+        const response = await axios.get<FundDetail>('http://localhost:3001/fetch_single_project',{
+            params, ...config
+        });
         // 获取响应数据
-        const data = response.data;
+        const data = response.data.project;
+        console.log('projectId', data);
         // 更新状态
         updateElement(data);
         } catch (error) {
@@ -72,21 +79,18 @@ export function FundDetailComponent() {
     };
 
     console.log('组件加载完成');
-    fetchData().then((responseData) => {
-        // 处理解析后的数据
-        console.log('请求成功，解析后的数据:', responseData);
-        // 执行其他逻辑...
-      });
+
+    // 通过API获取
+    fetchData()
 
     // mock
-    setFundDetailData(mockData)
+    // setFundDetailData(mockData)
 
     // 如果有清理操作，可以在返回的函数中进行
     return () => {
       console.log('组件卸载');
       // 进行清理操作，如取消网络请求、取消订阅等
       // 取消请求
-      cancelTokenSource.cancel('请求被取消');
 
     };
   }, []);
@@ -134,7 +138,7 @@ export function FundDetailComponent() {
                   </p>
                 </blockquote>
                 <figcaption className="mt-6 text-sm leading-6 text-gray-300">
-                  <strong className="font-semibold text-white">{ fundDetailData?.author || '' }</strong>
+                  <strong className="font-semibold text-white">{ fundDetailData?.projectOwner || '' }</strong>
                 </figcaption>
               </figure>
             </div>
@@ -143,10 +147,10 @@ export function FundDetailComponent() {
             <div className="text-base leading-7 text-gray-700 lg:max-w-lg">
               <p className="text-base font-semibold leading-7 text-indigo-600">{ fundDetailData?.category || '' }</p>
               <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                { fundDetailData?.title || '' }
+                { fundDetailData?.projectName || '' }
               </h1>
               <div className="max-w-xl">
-                { mainContent(fundDetailData?.content || '') }
+                { mainContent(fundDetailData?.projectDescription || '') }
               </div>
             </div>
 

@@ -12,7 +12,8 @@ const sampleImg = 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?
 
 function SignOutTab({inputClassName}) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const currentUser: User = useSelector((state) => state.user);
+  const currentUser = localStorage.getItem('username');
+  // const currentUser: User = useSelector((state) => state.user);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -23,8 +24,8 @@ function SignOutTab({inputClassName}) {
 
   const { register, handleSubmit } = useForm();
   const handleSignOut = async () => {
-    let name = currentUser.username
-    try {
+    let name = currentUser
+/*    try {
       console.log("Sign out", name)
       const response = await axios.post('http://localhost:3001/signout', {
         username: name
@@ -32,9 +33,11 @@ function SignOutTab({inputClassName}) {
       console.log('Sign out 成功回调', response.data);
     } catch (error) {
       console.error('Sign out 失败回调', error);
-    }
+    }*/
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentUser');
     dispatch(logout())
-    router.push("/")
+    router.refresh()
   };
 
   return (

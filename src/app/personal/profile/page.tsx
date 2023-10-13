@@ -20,7 +20,8 @@ function classNames(...classes: string[]) {
 export default function ProfilePage() {
 
   const [walletAddress, setWalletAddress] = useState('');
-  const currentUser: User = useSelector((state) => state.user);
+  const currentUser = localStorage.getItem('username');
+  // const currentUser: User = useSelector((state) => state.user);
 
   useEffect(() => {
     // 在组件加载后执行副作用操作
@@ -94,7 +95,7 @@ export default function ProfilePage() {
           </div>
         </div>
         <main className="py-10 mx-auto flex-col">
-          <div className="mx-auto flex"> Username: {currentUser?.username} </div>
+          <div className="mx-auto flex"> Username: {currentUser} </div>
           <div className="mx-auto flex"> Wallet Address: {walletAddress} </div>
         </main>
 

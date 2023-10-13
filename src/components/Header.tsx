@@ -55,7 +55,8 @@ function MobileNavIcon({ open }: { open: boolean }) {
 }
 
 function MobileNavigation() {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  // const isLoggedIn = useSelector((state) => state.isLoggedIn);
   return (
     <Popover>
       <Popover.Button
@@ -114,7 +115,8 @@ function MobileNavigation() {
 
 export function Header() {
 
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  // const isLoggedIn = useSelector((state) => state.isLoggedIn);
 
    useEffect(() => {
     console.log('组件加载完成');

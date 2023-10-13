@@ -7,7 +7,7 @@ export default function FundListPublic() {
     <>
       <Header />
       <main>
-          <div className="bg-white mx-auto max-w-7xl lg:px-8">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="max-w-2xl lg:mx-0">
                   <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Make your money more worthy</h2>
                   <p className="mt-2 text-lg leading-8 text-gray-600">
@@ -15,7 +15,7 @@ export default function FundListPublic() {
                   </p>
             </div>
           </div>
-        <FundList />
+        <FundList isSelf={false} type={0}/>
       </main>
       <Footer />
     </>

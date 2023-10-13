@@ -14,12 +14,8 @@ import FundDetail from "@/interfaces/FundDetail";
 
 export default function Home() {
 
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
-
    useEffect(() => {
     console.log('组件加载完成');
-    console.log('登录状态： ' + isLoggedIn)
-
     // 如果有清理操作，可以在返回的函数中进行
     return () => {
       console.log('组件卸载');

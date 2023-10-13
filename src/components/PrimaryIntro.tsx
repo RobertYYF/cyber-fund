@@ -14,7 +14,8 @@ import {NavLink} from "@/components/NavLink";
 
 export function PrimaryIntro() {
 
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  // const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
   return (
     <Container className="pb-16 pt-20 text-center lg:pt-32">

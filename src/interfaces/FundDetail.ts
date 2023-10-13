@@ -1,14 +1,15 @@
 interface FundDetail {
-  id?: number;
-  title?: string;
+  projectId?: number;
+  projectName?: string;
+  projectOwner?: string;
+  startTime?: number;
+  deadline?: number;
+  projectDescription?: string;
+  approvalDeadline?: number;
   category?: string;
-  author?: string;
   intro?: string;
-  content?: string;
-  start?: string;
-  end?: string;
   raised_fund?: number;
-  target_fund?: number;
+  projectGoal?: number;
 }
 
 export default FundDetail;
