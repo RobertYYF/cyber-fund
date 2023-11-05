@@ -6,10 +6,11 @@ import Link from "next/link";
 import {AxiosRequestConfig} from "axios";
 import User from "@/interfaces/User";
 import {useSelector} from "react-redux";
+import FundListResponse from "@/interfaces/FundListResponse";
 
 const sampleImg = 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-export function FundList({ isSelf, type }) {
+export function FundList({ isSelf, type }: { isSelf: Boolean, type: number }) {
   const [fundListData, setFundListData] = useState<FundDetail[] | []>([]);
   const currentUser = localStorage.getItem('username');
   // const currentUser: User = useSelector((state) => state.user);
@@ -31,7 +32,7 @@ export function FundList({ isSelf, type }) {
             cancelToken: cancelTokenSource.token,
           };
 
-        const response = await axios.get<FundDetail[]>('http://localhost:3001/fetch_projects',{
+        const response = await axios.get<FundListResponse>('/api/fetch_projects',{
           params, ...config
         });
         // 获取众筹项目列表

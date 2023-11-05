@@ -1,6 +1,8 @@
 interface User {
   username?: string;
-  address?: string;
+  password?: string;
+  engage_fund?: string[],
+  launch_fund?: string[]
 }
 
 export default User;

@@ -116,7 +116,6 @@ function MobileNavigation() {
 export function Header() {
 
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  // const isLoggedIn = useSelector((state) => state.isLoggedIn);
 
    useEffect(() => {
     console.log('组件加载完成');

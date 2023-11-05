@@ -121,7 +121,7 @@ export default function LaunchFundPage() {
 
   async function createProjectAPI() {
     try {
-      await axios.post('http://localhost:3001/create_project', {
+      await axios.post('/api/create_project', {
         username: currentUser,
         projectId: generateIdFromString(title),
         projectName: title,

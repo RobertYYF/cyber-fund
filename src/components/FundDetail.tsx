@@ -9,26 +9,18 @@ import {FundDetailContext} from "@/contexts/FundContext";
 import Link from "next/link";
 import axios, {AxiosRequestConfig} from "axios";
 import {formatDate} from "@/tools/stringformat";
-
-const mockData: FundDetail = {
-  projectId: 0,
-  category: 'Category Test',
-  projectOwner: 'Author Test',
-  projectName: '众筹Title Test',
-  intro: 'Introduction Test',
-  projectDescription: 'Content Test Paragraph 1 \n Paragraph 2 \n Paragraph 3 \n',
-  startTime: 0,
-  deadline: 0,
-  raised_fund: 0,
-  projectGoal: 1000
-}
+import FundDetailResponse from "@/interfaces/FundDetailResponse";
+import AvatarWithDropdown from "@/components/AvatarMenu";
 
 export function FundDetailComponent() {
 
   const [fundDetailData, setFundDetailData] = useState<FundDetail | null>(null);
+  const [isOwner, setIsOwner] = useState<boolean | null>(false);
 
   const queryParams = useSearchParams()
-  const projectId = queryParams.get('projectId') || ''
+  const projectId = queryParams?.get('projectId') || ''
+
+  const [donationList, setFundListData] = useState<Donation[] | []>([]);
 
   const updateElement = (data: FundDetail) => {
     setFundDetailData(data);
@@ -65,7 +57,7 @@ export function FundDetailComponent() {
           const config: AxiosRequestConfig = {
             cancelToken: cancelTokenSource.token,
           };
-        const response = await axios.get<FundDetail>('http://localhost:3001/fetch_single_project',{
+        const response = await axios.get<FundDetailResponse>('/api/fetch_single_project',{
             params, ...config
         });
         // 获取响应数据
@@ -154,6 +146,12 @@ export function FundDetailComponent() {
               </div>
             </div>
 
+           {donationList.map((donation) => (
+               <div>
+                  <dt className="text-sm font-semibold leading-6 text-gray-600">{donation.username}: {donation.amount}</dt>
+               </div>
+            ))}
+
             <div className="mt-10 gap-8 max-w-md h-6 bg-gray-200 rounded-full dark:bg-gray-700">
               <div className="h-6 bg-blue-600 rounded-full dark:bg-blue-500 font-medium text-blue-100 text-center p-0.5 leading-none" style={{
                     width: '85%'
@@ -168,15 +166,32 @@ export function FundDetailComponent() {
                 </div>
               ))}
             </dl>
-            <div className="mt-10">
-              <Link
-                  href={{ pathname: '/fund/fund_engage', query: { detail: encodeURIComponent(JSON.stringify(fundDetailData)) }}}
-                  type="button"
-                  className="rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                参与募资
-              </Link>
-            </div>
+
+            {isOwner ? (
+              // Owner
+              <div className="mt-10 flex-col flex max-w-xl">
+                <Button className=" rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                  Cancel Project
+                </Button>
+                <Button className="mt-10 rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                  Finish Project
+                </Button>
+              </div>
+
+            ) : (
+              // Normal User
+              <div className="mt-10">
+                <Link
+                    href={{ pathname: '/fund/fund_engage', query: { detail: encodeURIComponent(JSON.stringify(fundDetailData)) }}}
+                    type="button"
+                    className="rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  参与募资
+                </Link>
+              </div>
+            )}
+
+
           </div>
         </div>
       </div>

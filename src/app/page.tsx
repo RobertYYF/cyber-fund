@@ -5,11 +5,7 @@ import { Header } from '@/components/Header'
 import { PrimaryIntro } from '@/components/PrimaryIntro'
 import { PrimaryFeatures } from '@/components/PrimaryFeatures'
 import { SecondaryFeatures } from '@/components/SecondaryFeatures'
-import {Provider, useSelector} from 'react-redux';
-import store from '@/redux/store';
 import {useEffect} from "react";
-import axios from "axios";
-import FundDetail from "@/interfaces/FundDetail";
 
 
 export default function Home() {
@@ -26,7 +22,6 @@ export default function Home() {
 
   return (
     <>
-      <Provider store={store}>
       <Header />
       <main>
         <PrimaryIntro />
@@ -35,7 +30,6 @@ export default function Home() {
         <Faqs />
       </main>
       <Footer />
-      </Provider>
     </>
   )
 }

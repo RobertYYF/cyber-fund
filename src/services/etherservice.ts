@@ -7,22 +7,16 @@ const contractABI = abi; // 智能合约的ABI
 
 const provider = new ethers.JsonRpcProvider("https://rpc1.aries.axiomesh.io");
 
-export async function donate(req: NextApiRequest, res: NextApiResponse) {
+export async function donate(projectId: number) {
     const contract = new ethers.Contract(contractAddress, contractABI, provider);
-    const result = await contract.donate();
-
-    res.status(200).json({ result });
+    const result = await contract.donate(projectId);
+    
 }
 
 // 调用 createProject 方法
-export async function createProject(deadline: string, personalInfo: string, projectDescription: string) {
-  // 获取用户钱包
-  const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-  const signer = provider.getSigner();
+export async function createProject(deadline: number) {
+  const contract = new ethers.Contract(contractAddress, contractABI, provider);
+  const result = await contract.createProject(deadline);
 
-  // 使用钱包进行交易
-  const contractWithSigner = contract.connect(signer);
-  const result = await contractWithSigner.createProject(deadline, personalInfo, projectDescription);
-
-  return result;
 }
+

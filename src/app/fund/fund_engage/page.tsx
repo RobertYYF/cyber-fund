@@ -4,45 +4,17 @@ import { Disclosure } from '@headlessui/react'
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 import {Header} from "@/components/Header";
 import {Footer} from "@/components/Footer";
-import {TransferForm} from "@/components/TransferForm";
 import React, {useEffect, useState} from "react";
 import FundDetail from "@/interfaces/FundDetail";
 import {useRouter, useSearchParams} from "next/navigation";
 import axios from "axios";
-import {AxiosRequestConfig} from "axios/index";
-import User from "@/interfaces/User";
-import {useSelector} from "react-redux";
-import {Button} from "@/components/Button";
 import Web3 from 'web3';
-import Link from "next/link";
 import {formatDate} from "@/tools/stringformat";
-
-const subtotal = '$210.00'
-const discount = { code: 'CHEAPSKATE', amount: '$24.00' }
-const taxes = '$23.68'
-const shipping = '$22.00'
-const total = '$0'
-const products = [
-  {
-    id: 1,
-    name: 'Micro Backpack',
-    href: '#',
-    price: '$70.00',
-    color: 'Moss',
-    size: '5L',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/checkout-page-04-product-01.jpg',
-    imageAlt:
-      'Moss green canvas compact backpack with double top zipper, zipper front pouch, and matching carry handle and backpack straps.',
-  },
-  // More products...
-]
 
 export default function FundEngagePage() {
 
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  // const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const currentUser = localStorage.getItem('username');
-  // const currentUser: User = useSelector((state) => state.user);
 
   const router = useRouter();
 
@@ -53,12 +25,12 @@ export default function FundEngagePage() {
   const [amount, setAmount] = useState('');
 
   const queryParams = useSearchParams();
-  const fundDetailStr = queryParams.get('detail');
+  const fundDetailStr = queryParams?.get('detail');
   const parsedFundDetail = fundDetailStr ? JSON.parse(decodeURIComponent(fundDetailStr)) : null;
 
   const addToHistory = async () => {
       try {
-        const response = await axios.post<FundDetail>('http://localhost:3001/engage_fund',{
+        const response = await axios.post<FundDetail>('/api/engage_fund',{
             username: currentUser,
             projectId: parsedFundDetail.projectId
         });
