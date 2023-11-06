@@ -24,12 +24,6 @@
 						"internalType": "uint256",
 						"name": "amount",
 						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "string",
-						"name": "comment",
-						"type": "string"
 					}
 				],
 				"name": "DonationReceived",
@@ -91,21 +85,15 @@
 				"inputs": [
 					{
 						"indexed": false,
+						"internalType": "string",
+						"name": "projectId",
+						"type": "string"
+					},
+					{
+						"indexed": false,
 						"internalType": "uint256",
-						"name": "deadline",
+						"name": "startTime",
 						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "string",
-						"name": "personalInfo",
-						"type": "string"
-					},
-					{
-						"indexed": false,
-						"internalType": "string",
-						"name": "rojectDescription",
-						"type": "string"
 					}
 				],
 				"name": "ProjectCreated",
@@ -188,16 +176,6 @@
 						"internalType": "uint256",
 						"name": "_deadline",
 						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "_personalInfo",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "_projectDescription",
-						"type": "string"
 					}
 				],
 				"name": "createProject",
@@ -211,16 +189,88 @@
 						"internalType": "uint256",
 						"name": "projectId",
 						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "_comment",
-						"type": "string"
 					}
 				],
 				"name": "donate",
 				"outputs": [],
 				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllProjects",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "projectOwner",
+								"type": "address"
+							},
+							{
+								"components": [
+									{
+										"internalType": "address",
+										"name": "donor",
+										"type": "address"
+									},
+									{
+										"internalType": "uint256",
+										"name": "amount",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "timestamp",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct Fundraising.Donation[]",
+								"name": "donations",
+								"type": "tuple[]"
+							},
+							{
+								"internalType": "uint256",
+								"name": "totalDonations",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "projectClosed",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "deadline",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "fundsReleased",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "approvalDeadline",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "isApproved",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct Fundraising.Project[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -244,11 +294,6 @@
 								"internalType": "uint256",
 								"name": "amount",
 								"type": "uint256"
-							},
-							{
-								"internalType": "string",
-								"name": "comment",
-								"type": "string"
 							},
 							{
 								"internalType": "uint256",
@@ -287,11 +332,6 @@
 								"type": "uint256"
 							},
 							{
-								"internalType": "string",
-								"name": "comment",
-								"type": "string"
-							},
-							{
 								"internalType": "uint256",
 								"name": "timestamp",
 								"type": "uint256"
@@ -321,33 +361,6 @@
 						"type": "address"
 					},
 					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "donor",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "amount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "string",
-								"name": "comment",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "timestamp",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct Fundraising.Donation[]",
-						"name": "donations",
-						"type": "tuple[]"
-					},
-					{
 						"internalType": "uint256",
 						"name": "totalDonations",
 						"type": "uint256"
@@ -371,16 +384,6 @@
 						"internalType": "bool",
 						"name": "fundsReleased",
 						"type": "bool"
-					},
-					{
-						"internalType": "string",
-						"name": "personalInfo",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "projectDescription",
-						"type": "string"
 					},
 					{
 						"internalType": "uint256",
@@ -450,16 +453,6 @@
 						"type": "bool"
 					},
 					{
-						"internalType": "string",
-						"name": "personalInfo",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "projectDescription",
-						"type": "string"
-					},
-					{
 						"internalType": "uint256",
 						"name": "approvalDeadline",
 						"type": "uint256"
@@ -497,6 +490,25 @@
 				"name": "setApprovalDuration",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"name": "uint256ToString",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "pure",
 				"type": "function"
 			},
 			{

@@ -85,17 +85,16 @@ export default function LaunchFundPage() {
     } else {
       console.log("pass here")
       // 线上逻辑
-      /*createProjectEther().then( result =>
+      createProjectEther().then( result =>
           {
-            console.log('Project Creat Success!');
-            createProjectAPI();
+            if (result !== '') {
+              console.log('Project Creat Success!');
+              createProjectAPI(result);
+            }
           }
       ).catch(e => {
         console.log(e);
-      });*/
-
-      // test
-      createProjectAPI();
+      });
 
       // 重置表单字段
       setName('');
@@ -110,22 +109,28 @@ export default function LaunchFundPage() {
 
   async function createProjectEther() {
 
+    console.log('here')
+
+    let projectId = '';
+
     const dateObject = new Date(date);
     const dateInSeconds = Math.floor(dateObject.getTime() / 1000);
 
     try {
-      const result = await createProject(dateInSeconds);
-      console.log('Transaction hash:', result);
+      projectId = await createProject(dateInSeconds);
+      console.log('Create Project Success', projectId);
     } catch (error) {
       console.error('Error:', error);
     }
+
+    return projectId
   }
 
-  async function createProjectAPI() {
+  async function createProjectAPI(projectId: string) {
     try {
       await axios.post('/api/create_project', {
         username: currentUser,
-        projectId: generateIdFromString(title),
+        projectId: projectId,
         projectName: title,
         projectOwner: currentUser,
         projectGoal: goal,

@@ -1,6 +1,6 @@
 'use client'
 
-import {Fragment, useContext, useEffect} from 'react'
+import {Fragment, useContext, useEffect, useState} from 'react'
 import Link from 'next/link'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
@@ -11,6 +11,7 @@ import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
 import AvatarWithDropdown from "@/components/AvatarMenu";
 import SignOutTab from "@/components/SignOutTab";
+import FundDetail from "@/interfaces/FundDetail";
 
 function MobileNavLink({
   href,
@@ -112,12 +113,13 @@ function MobileNavigation({ isLoggedIn }: { isLoggedIn: boolean }) {
 
 export function Header() {
 
-  let isLoggedIn = false;
+   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
    useEffect(() => {
 
-    isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
 
+    console.log('登录状态 ', isLoggedIn)
     console.log('组件加载完成');
     console.log('登录状态： ' + isLoggedIn)
 
