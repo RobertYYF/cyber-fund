@@ -12,8 +12,8 @@ function SignOutTab({ inputClassName }: { inputClassName: string } ) {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    sessionStorage.removeItem('isLoggedIn');
-    sessionStorage.removeItem('currentUser');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentUser');
     router.refresh()
   };
 

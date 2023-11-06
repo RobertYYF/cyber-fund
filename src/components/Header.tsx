@@ -116,7 +116,7 @@ export function Header() {
 
    useEffect(() => {
 
-    isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
     console.log('组件加载完成');
     console.log('登录状态： ' + isLoggedIn)

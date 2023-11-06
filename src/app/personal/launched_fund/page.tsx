@@ -25,8 +25,8 @@ export default function LaunchedFundPage() {
 
   useEffect(() => {
 
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-    currentUser = sessionStorage.getItem('username');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    currentUser = localStorage.getItem('username');
 
     if (!isLoggedIn) {
       router.push('/auth/login')

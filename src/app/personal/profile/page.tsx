@@ -23,7 +23,7 @@ export default function ProfilePage() {
   let currentUser: string | null = null;
 
   useEffect(() => {
-    currentUser = sessionStorage.getItem('username');
+    currentUser = localStorage.getItem('username');
 
     // 在组件加载后执行副作用操作
     console.log('组件加载完成');

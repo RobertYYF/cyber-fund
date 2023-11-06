@@ -14,7 +14,7 @@ export function FundList({ isSelf, type }: { isSelf: Boolean, type: number }) {
   const [fundListData, setFundListData] = useState<FundDetail[] | []>([]);
 
   useEffect(() => {
-    const currentUser = sessionStorage.getItem('username');
+    const currentUser = localStorage.getItem('username');
 
     // 创建一个取消令牌
     const cancelTokenSource = axios.CancelToken.source();

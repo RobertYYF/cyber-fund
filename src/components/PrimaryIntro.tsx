@@ -17,8 +17,8 @@ export function PrimaryIntro() {
 
     let isLoggedIn = false;
 
-    useEffect(() => {isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-        isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    useEffect(() => {isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     }, []);
 
   return (

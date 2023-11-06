@@ -100,8 +100,8 @@ export default function FundEngagePage() {
 
   useEffect(() => {
 
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-    currentUser = sessionStorage.getItem('username');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    currentUser = localStorage.getItem('username');
 
     // 检查登录状态
     if (!isLoggedIn) {
