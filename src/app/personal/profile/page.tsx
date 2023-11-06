@@ -20,10 +20,11 @@ function classNames(...classes: string[]) {
 export default function ProfilePage() {
 
   const [walletAddress, setWalletAddress] = useState('');
-  const currentUser = localStorage.getItem('username');
-  // const currentUser: User = useSelector((state) => state.user);
+  let currentUser: string | null = null;
 
   useEffect(() => {
+    currentUser = sessionStorage.getItem('username');
+
     // 在组件加载后执行副作用操作
     console.log('组件加载完成');
 

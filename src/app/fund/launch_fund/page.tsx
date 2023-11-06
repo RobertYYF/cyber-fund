@@ -4,19 +4,14 @@ import { Header } from '@/components/Header'
 import {createProject} from "@/services/etherservice";
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
-import {useSelector} from "react-redux";
 import axios from "axios";
 import {useRouter} from "next/navigation";
-import User from "@/interfaces/User";
 import crypto from 'crypto';
 
 export default function LaunchFundPage() {
 
   const router = useRouter();
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  // const isLoggedIn = useSelector((state) => state.isLoggedIn);
-  const currentUser = localStorage.getItem('username');
-  // const currentUser: User = useSelector((state) => state.user);
+  let currentUser: string | null = null;
 
   function generateIdFromString(inputString: string): string {
     const hash = crypto.createHash('sha256');
@@ -25,6 +20,9 @@ export default function LaunchFundPage() {
   }
 
   useEffect(() => {
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    currentUser = sessionStorage.getItem('username');
+
     // 检查登录状态
     if (!isLoggedIn) {
       router.push("/auth/login")
@@ -111,9 +109,13 @@ export default function LaunchFundPage() {
   };
 
   async function createProjectEther() {
+
+    const dateObject = new Date(date);
+    const dateInSeconds = Math.floor(dateObject.getTime() / 1000);
+
     try {
-      const result = await createProject(date, name, description);
-      console.log('Transaction hash:', result.hash);
+      const result = await createProject(dateInSeconds);
+      console.log('Transaction hash:', result);
     } catch (error) {
       console.error('Error:', error);
     }

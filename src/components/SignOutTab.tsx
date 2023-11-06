@@ -4,7 +4,6 @@ import {useRouter} from "next/navigation";
 
 function SignOutTab({ inputClassName }: { inputClassName: string } ) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const currentUser = localStorage.getItem('username');
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -13,8 +12,8 @@ function SignOutTab({ inputClassName }: { inputClassName: string } ) {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('isLoggedIn');
+    sessionStorage.removeItem('currentUser');
     router.refresh()
   };
 

@@ -1,16 +1,12 @@
 'use client';
 import {Button} from "@/components/Button";
 import {useContext, useEffect, useState} from "react";
-import api from '@/services/apiservice';
 import FundDetail from '@/interfaces/FundDetail';
-import {useRouter} from "next/router";
 import {useSearchParams} from "next/navigation";
-import {FundDetailContext} from "@/contexts/FundContext";
 import Link from "next/link";
 import axios, {AxiosRequestConfig} from "axios";
 import {formatDate} from "@/tools/stringformat";
 import FundDetailResponse from "@/interfaces/FundDetailResponse";
-import AvatarWithDropdown from "@/components/AvatarMenu";
 
 export function FundDetailComponent() {
 
@@ -146,8 +142,8 @@ export function FundDetailComponent() {
               </div>
             </div>
 
-           {donationList.map((donation) => (
-               <div>
+           {donationList.map((donation, index) => (
+               <div key={index}>
                   <dt className="text-sm font-semibold leading-6 text-gray-600">{donation.username}: {donation.amount}</dt>
                </div>
             ))}

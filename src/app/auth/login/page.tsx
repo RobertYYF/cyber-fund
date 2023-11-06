@@ -27,8 +27,8 @@ export default function Login() {
 
       if (response.ok) {
         console.log('Login successful:', data);
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', name);
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('username', name);
         router.push("/");
       } else {
         console.error('Login failed:', data);

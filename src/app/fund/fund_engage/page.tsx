@@ -13,9 +13,6 @@ import {formatDate} from "@/tools/stringformat";
 
 export default function FundEngagePage() {
 
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  const currentUser = localStorage.getItem('username');
-
   const router = useRouter();
 
   const [fundDetailData, setFundDetailData] = useState<FundDetail | null>(null);
@@ -27,6 +24,8 @@ export default function FundEngagePage() {
   const queryParams = useSearchParams();
   const fundDetailStr = queryParams?.get('detail');
   const parsedFundDetail = fundDetailStr ? JSON.parse(decodeURIComponent(fundDetailStr)) : null;
+
+  let currentUser: string | null = null;
 
   const addToHistory = async () => {
       try {
@@ -100,6 +99,10 @@ export default function FundEngagePage() {
   }, [web3]);
 
   useEffect(() => {
+
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    currentUser = sessionStorage.getItem('username');
+
     // 检查登录状态
     if (!isLoggedIn) {
       // router.push("/auth/login")

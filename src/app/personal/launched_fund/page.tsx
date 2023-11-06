@@ -21,14 +21,13 @@ function classNames(...classes: string[]) {
 export default function LaunchedFundPage() {
 
     const router = useRouter();
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    // const isLoggedIn = useSelector((state) => state.isLoggedIn);
-    const currentUser = localStorage.getItem('username');
-    // const currentUser: User = useSelector((state) => state.user);
-
-    const username = currentUser || ''
+    let currentUser: string | null = null;
 
   useEffect(() => {
+
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    currentUser = sessionStorage.getItem('username');
+
     if (!isLoggedIn) {
       router.push('/auth/login')
     }
@@ -47,7 +46,7 @@ export default function LaunchedFundPage() {
       <Header />
         <div className="border-b border-gray-200 mx-auto flex max-w-lg">
           <div className="sm:flex sm:items-baseline">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">{username}</h3>
+            <h3 className="text-base font-semibold leading-6 text-gray-900">{currentUser}</h3>
             <div className="mt-4 sm:ml-10 sm:mt-0">
               <nav className="-mb-px flex space-x-8">
                 {tabs.map((tab) => (

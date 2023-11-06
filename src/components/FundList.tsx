@@ -12,10 +12,10 @@ const sampleImg = 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?
 
 export function FundList({ isSelf, type }: { isSelf: Boolean, type: number }) {
   const [fundListData, setFundListData] = useState<FundDetail[] | []>([]);
-  const currentUser = localStorage.getItem('username');
-  // const currentUser: User = useSelector((state) => state.user);
 
   useEffect(() => {
+    const currentUser = sessionStorage.getItem('username');
+
     // 创建一个取消令牌
     const cancelTokenSource = axios.CancelToken.source();
 

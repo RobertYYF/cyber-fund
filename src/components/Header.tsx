@@ -1,6 +1,6 @@
 'use client'
 
-import {Fragment, useEffect} from 'react'
+import {Fragment, useContext, useEffect} from 'react'
 import Link from 'next/link'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
@@ -9,7 +9,6 @@ import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
-import {useSelector} from "react-redux";
 import AvatarWithDropdown from "@/components/AvatarMenu";
 import SignOutTab from "@/components/SignOutTab";
 
@@ -54,9 +53,7 @@ function MobileNavIcon({ open }: { open: boolean }) {
   )
 }
 
-function MobileNavigation() {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  // const isLoggedIn = useSelector((state) => state.isLoggedIn);
+function MobileNavigation({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <Popover>
       <Popover.Button
@@ -115,9 +112,12 @@ function MobileNavigation() {
 
 export function Header() {
 
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  let isLoggedIn = false;
 
    useEffect(() => {
+
+    isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+
     console.log('组件加载完成');
     console.log('登录状态： ' + isLoggedIn)
 
@@ -163,7 +163,7 @@ export function Header() {
           )}
 
           <div className="-mr-1 md:hidden">
-            <MobileNavigation />
+            <MobileNavigation isLoggedIn={isLoggedIn}/>
           </div>
         </nav>
       </Container>

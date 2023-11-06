@@ -11,11 +11,15 @@ import logoTuple from '@/images/logos/tuple.svg'
 import {useSelector} from "react-redux";
 import AvatarWithDropdown from "@/components/AvatarMenu";
 import {NavLink} from "@/components/NavLink";
+import {useEffect} from "react";
 
 export function PrimaryIntro() {
 
-  // const isLoggedIn = useSelector((state) => state.isLoggedIn);
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    let isLoggedIn = false;
+
+    useEffect(() => {isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+        isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    }, []);
 
   return (
     <Container className="pb-16 pt-20 text-center lg:pt-32">
