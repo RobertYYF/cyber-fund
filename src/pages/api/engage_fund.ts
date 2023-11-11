@@ -7,7 +7,7 @@ export default async function engage_fund(req: NextApiRequest, res: NextApiRespo
     console.log('engage_fund尝试')
     const { projectId, username } = req.body;
     // 更新到User中
-    const updateRes = await client.rpush(`\$${username}:engage_fund`, projectId);
+    const updateRes = await client.rpush(`${username}:engage_fund`, projectId);
     if (updateRes) {
         console.log('Project Id 写入个人成功')
         return res.status(201).json({message: projectId});

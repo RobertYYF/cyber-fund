@@ -1,15 +1,14 @@
 "use client";
 
-import { Disclosure } from '@headlessui/react'
-import { LockClosedIcon } from '@heroicons/react/20/solid'
 import {Header} from "@/components/Header";
 import {Footer} from "@/components/Footer";
 import React, {useEffect, useState} from "react";
 import FundDetail from "@/interfaces/FundDetail";
+import {contractAddress, donate} from "@/services/etherservice";
 import {useRouter, useSearchParams} from "next/navigation";
 import axios from "axios";
 import Web3 from 'web3';
-import {formatDate} from "@/tools/stringformat";
+import {ethers} from "@axiomesh/axiom";
 
 export default function FundEngagePage() {
 
@@ -26,11 +25,12 @@ export default function FundEngagePage() {
   const parsedFundDetail = fundDetailStr ? JSON.parse(decodeURIComponent(fundDetailStr)) : null;
 
   let currentUser: string | null = null;
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const addToHistory = async () => {
       try {
         const response = await axios.post<FundDetail>('/api/engage_fund',{
-            username: currentUser,
+            username: localStorage.getItem("username"),
             projectId: parsedFundDetail.projectId
         });
         console.error('更新到User成功:');
@@ -39,42 +39,21 @@ export default function FundEngagePage() {
         }
     };
 
-  const stats = [
-    { label: 'Name', value: fundDetailData?.projectOwner || '' },
-    { label: 'Start', value: formatDate(fundDetailData?.startTime || 0 )},
-    { label: 'End', value: formatDate(fundDetailData?.deadline || 0)},
-    { label: 'Raised', value: fundDetailData?.raised_fund || 0 },
-  ]
-
   const handleTransfer = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (web3 && accounts.length > 0) {
-      const sender = accounts[0];
-
-      // 构建转账交易对象
-      const transaction = {
-        from: sender,
-        to: recipient,
-        value: web3.utils.toWei(amount, 'ether'),
-      };
-
-      try {
-        // 发送交易
-        await web3.eth.sendTransaction(transaction);
-        console.log('Transaction sent successfully');
-        addToHistory();
-      } catch (error) {
-        console.error('Failed to send transaction:', error);
-      }
+    const res = await donate(parsedFundDetail.projectId, localStorage.getItem("username") || '', {value: ethers.parseEther(amount)});
+    if (res) {
+      await addToHistory();
+      console.log('Donate success')
+      router.push('/personal/participated_fund')
     }
-  };
-
+  }
   const connectToMetaMask = async () => {
+    if (typeof window !== 'undefined') {
       if (window.ethereum) {
         try {
           // 请求用户授权
-          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          await window.ethereum.request({method: 'eth_requestAccounts'});
           // 创建 Web3 实例
           const web3Instance = new Web3(window.ethereum);
           setWeb3(web3Instance);
@@ -84,7 +63,8 @@ export default function FundEngagePage() {
       } else {
         console.error('MetaMask not found');
       }
-    };
+    }
+  };
 
   const fetchAccounts = async () => {
       if (web3) {
@@ -100,14 +80,14 @@ export default function FundEngagePage() {
 
   useEffect(() => {
 
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
     currentUser = localStorage.getItem('username');
 
     // 检查登录状态
-    if (!isLoggedIn) {
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
       // router.push("/auth/login")
     }
-    console.log('组件加载完成');
+    console.log('组件加载完成 here');
     setFundDetailData(parsedFundDetail);
 
     connectToMetaMask();
@@ -138,12 +118,7 @@ export default function FundEngagePage() {
                   <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
                     Recipient Address
                   </label>
-                  <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                      <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm"></span>
-                      <input type="text" value={recipient}  onChange={(e) => setAmount(e.target.value)} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" />
-                    </div>
-                  </div>
+                  <div className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">{contractAddress}</div>
 
                   <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
                     Amount

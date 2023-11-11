@@ -12,13 +12,18 @@ async function fetchFundListByType(type: string, username: string | string[] | u
     }
 
     // 从 Redis 中获取所有项目的 ID
-    const projectIds = await client.lrange(`\$${username}:${typeStr}`, 0, -1);
+    const projectIds = await client.lrange(`${username}:${typeStr}`, 0, -1);
     if (projectIds) {
         console.log('获取source: ', username, typeStr)
         console.log('获取projects数量', projectIds.length)
 
         // 通过项目 ID 获取项目数据
         const projects: string[] = [];
+
+        if (projectIds.length == 0) {
+            return;
+        }
+
         const multi = client.multi();
 
         projectIds.forEach((projectId) => {

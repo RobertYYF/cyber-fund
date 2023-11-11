@@ -5,6 +5,8 @@ export default async function create_project(req: NextApiRequest, res: NextApiRe
   if (req.method === 'POST') {
     const {username, projectId, projectName, projectOwner, projectGoal, description, deadline} = req.body;
 
+    console.log('username in create_project api: ', username)
+
     const deadlineDate = new Date(deadline);
     const deadLineTimestamp = deadlineDate.getTime();
 
@@ -39,7 +41,7 @@ export default async function create_project(req: NextApiRequest, res: NextApiRe
             console.error('Error updating projectId list in Redis');
         }
 
-        const updateUserListRes = await client.rpush(`\$${username}:launch_fund`, projectId);
+        const updateUserListRes = await client.rpush(`${username}:launch_fund`, projectId);
         if (updateUserListRes) {
             console.log('Project Id 写入个人成功')
         } else {

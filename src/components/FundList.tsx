@@ -39,8 +39,6 @@ export function FundList({ isSelf, type }: { isSelf: Boolean, type: number }) {
         const jsonData = response.data;
         const data = jsonData.projects;
 
-        console.log("return data ", data.length)
-
         // 更新状态
         setFundListData(data);
 

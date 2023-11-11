@@ -20,10 +20,12 @@ function classNames(...classes: string[]) {
 export default function ProfilePage() {
 
   const [walletAddress, setWalletAddress] = useState('');
-  let currentUser: string | null = null;
+  const [currentUser, setCurrentUser] = useState('');
 
   useEffect(() => {
-    currentUser = localStorage.getItem('username');
+    setCurrentUser(localStorage.getItem('username') || '');
+
+    console.log('currentUser is ', currentUser)
 
     // 在组件加载后执行副作用操作
     console.log('组件加载完成');
@@ -66,14 +68,12 @@ export default function ProfilePage() {
     };
   }, []);
 
-  var name = "Your Name";
-
   return (
     <>
       <Header />
         <div className="border-b border-gray-200 mx-auto flex max-w-lg">
           <div className="sm:flex sm:items-baseline">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">{name}</h3>
+            <h3 className="text-base font-semibold leading-6 text-gray-900">{currentUser}</h3>
             <div className="mt-4 sm:ml-10 sm:mt-0">
               <nav className="-mb-px flex space-x-8">
                 {tabs.map((tab) => (
@@ -96,8 +96,11 @@ export default function ProfilePage() {
           </div>
         </div>
         <main className="py-10 mx-auto flex-col">
-          <div className="mx-auto flex"> Username: {currentUser} </div>
-          <div className="mx-auto flex"> Wallet Address: {walletAddress} </div>
+          <p className="text-sm font-medium text-gray-900">Username</p>
+          <p className="truncate text-sm text-gray-500">{currentUser}</p>
+
+          <p className="mt-4 text-sm font-medium text-gray-900">Wallet Address</p>
+          <p className="truncate text-sm text-gray-500">{walletAddress}</p>
         </main>
 
       <Footer />

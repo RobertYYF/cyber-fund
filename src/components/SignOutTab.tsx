@@ -12,9 +12,11 @@ function SignOutTab({ inputClassName }: { inputClassName: string } ) {
   const router = useRouter();
 
   const handleSignOut = async () => {
+    console.log('sign out')
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('currentUser');
-    router.refresh()
+    router.push('/');
+    router.refresh();
   };
 
   return (

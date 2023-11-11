@@ -85,9 +85,9 @@
 				"inputs": [
 					{
 						"indexed": false,
-						"internalType": "string",
+						"internalType": "uint256",
 						"name": "projectId",
-						"type": "string"
+						"type": "uint256"
 					},
 					{
 						"indexed": false,
@@ -187,8 +187,26 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "_deadline",
+						"type": "uint256"
+					}
+				],
+				"name": "createProjectAutoApproved",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "projectId",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_username",
+						"type": "string"
 					}
 				],
 				"name": "donate",
@@ -209,6 +227,11 @@
 							},
 							{
 								"components": [
+									{
+										"internalType": "string",
+										"name": "username",
+										"type": "string"
+									},
 									{
 										"internalType": "address",
 										"name": "donor",
@@ -286,6 +309,11 @@
 					{
 						"components": [
 							{
+								"internalType": "string",
+								"name": "username",
+								"type": "string"
+							},
+							{
 								"internalType": "address",
 								"name": "donor",
 								"type": "address"
@@ -321,6 +349,11 @@
 				"outputs": [
 					{
 						"components": [
+							{
+								"internalType": "string",
+								"name": "username",
+								"type": "string"
+							},
 							{
 								"internalType": "address",
 								"name": "donor",
@@ -490,25 +523,6 @@
 				"name": "setApprovalDuration",
 				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "value",
-						"type": "uint256"
-					}
-				],
-				"name": "uint256ToString",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "pure",
 				"type": "function"
 			},
 			{

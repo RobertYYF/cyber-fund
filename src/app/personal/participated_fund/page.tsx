@@ -6,7 +6,7 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useSelector} from "react-redux";
 import User from "@/interfaces/User";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import user from "@/interfaces/User";
 
 const tabs = [
@@ -24,10 +24,12 @@ export default function ParticipatedFundPage() {
   const router = useRouter();
   let currentUser: string | null = null;
 
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
     currentUser = localStorage.getItem('username');
-    if (!isLoggedIn) {
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
       router.push('/auth/login')
     }
     // 在组件加载后执行副作用操作

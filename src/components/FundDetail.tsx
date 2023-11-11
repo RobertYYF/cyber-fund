@@ -1,26 +1,97 @@
 'use client';
 import {Button} from "@/components/Button";
-import {useContext, useEffect, useState} from "react";
-import FundDetail from '@/interfaces/FundDetail';
-import {useSearchParams} from "next/navigation";
+import {useEffect, useState} from "react";
+import FundDetail, {FundDetailClass} from '@/interfaces/FundDetail';
+import {useRouter, useSearchParams} from "next/navigation";
 import Link from "next/link";
 import axios, {AxiosRequestConfig} from "axios";
 import {formatDate} from "@/tools/stringformat";
 import FundDetailResponse from "@/interfaces/FundDetailResponse";
+import {cancelProject, getDonationById, getFundDetailById, withdrawFunds} from "@/services/etherservice";
+import DonationList from "@/components/DonationList";
 
 export function FundDetailComponent() {
 
   const [fundDetailData, setFundDetailData] = useState<FundDetail | null>(null);
   const [isOwner, setIsOwner] = useState<boolean | null>(false);
 
+  const [startTime, setStartTime] = useState<string>('')
+  const [endTime, setEndTime] = useState<string>('')
+
+  const [projectClosedState, setProjectClosedState] = useState<boolean>(false)
+
   const queryParams = useSearchParams()
   const projectId = queryParams?.get('projectId') || ''
 
-  const [donationList, setFundListData] = useState<Donation[] | []>([]);
+  const [donationList, setDonationList] = useState<Donation[] | []>([]);
+
+  const router = useRouter();
 
   const updateElement = (data: FundDetail) => {
     setFundDetailData(data);
   };
+
+  const fetchFundDetailEther = async (projectId: string) => {
+    const etherProject = await getFundDetailById(projectId);
+
+    console.log('fetchFundDetailEther, ', etherProject, fundDetailData)
+
+    let fundDetailRef = null;
+
+    if (fundDetailData == null) {
+        fundDetailRef = new FundDetailClass();
+    } else {
+        fundDetailRef = fundDetailData
+    }
+
+    if (etherProject) {
+      fundDetailRef.fundReleased = etherProject.fundsReleased
+      fundDetailRef.approvalDeadline = Number(etherProject.approvedDeadline)
+      fundDetailRef.isApproved = etherProject.isApproved
+      fundDetailRef.startTime = Number(etherProject.startTime)
+      fundDetailRef.deadline = Number(etherProject.deadline)
+      fundDetailRef.projectClosed = etherProject.projectClosed
+
+      const startTimeDate = new Date(Number(etherProject.startTime) * 1000);
+      const endTimeDate = new Date(Number(etherProject.deadline) * 1000);
+      setStartTime(startTimeDate.toDateString());
+      setEndTime(endTimeDate.toDateString());
+      setProjectClosedState(etherProject.projectClosed);
+
+      console.log('projectClosed state is: ', etherProject.projectClosed);
+    }
+
+    setFundDetailData(fundDetailRef);
+  }
+
+  const fetchDonationEther = async (projectId: string) => {
+    const donationList = await getDonationById(projectId);
+    const divisor = 100000000000000000;
+    // 将捐款金额转换为 number 类型
+    donationList?.forEach((donation, index) => {
+      console.log('Output number is: ', Number(donation.amount.valueOf()) / divisor)
+      donation.parsedAmount = Number(donation.amount.valueOf()) / divisor
+    })
+    if (donationList) {
+      setDonationList(donationList);
+    }
+  }
+
+  const cancelProjectEther = async(projectId: string) => {
+    const returnVal = await cancelProject(projectId);
+    if (returnVal) {
+      console.log("Cancel Project Success");
+      router.push("/personal/launched_fund")
+    }
+  }
+
+  const withdrawFundEther = async(projectId: string) => {
+    const returnVal = await withdrawFunds(projectId);
+    if (returnVal) {
+      console.log("Withdraw Fund Success");
+      router.push("/personal/launched_fund")
+    }
+  }
 
   const mainContent = (content: string) => {
     // 主体分段
@@ -33,13 +104,6 @@ export function FundDetailComponent() {
       </div>
     );
   };
-
-  const stats = [
-    { label: 'Name', value: fundDetailData?.projectOwner || '' },
-    { label: 'Start', value: formatDate(fundDetailData?.startTime || 0) },
-    { label: 'End', value: formatDate(fundDetailData?.deadline || 0) },
-    { label: 'Raised', value: fundDetailData?.raised_fund || 0 },
-  ]
 
   useEffect(() => {
     // 创建一个取消令牌
@@ -61,6 +125,8 @@ export function FundDetailComponent() {
         console.log('projectId', data);
         // 更新状态
         updateElement(data);
+        // 更新owner状态
+        setIsOwner(data.projectOwner === localStorage.getItem("username"))
         } catch (error) {
           console.error('请求错误:', error);
         }
@@ -69,17 +135,15 @@ export function FundDetailComponent() {
     console.log('组件加载完成');
 
     // 通过API获取
-    fetchData()
+    fetchData();
 
-    // mock
-    // setFundDetailData(mockData)
+    // 通过ether获取
+    fetchFundDetailEther(projectId);
+    fetchDonationEther(projectId);
 
     // 如果有清理操作，可以在返回的函数中进行
     return () => {
       console.log('组件卸载');
-      // 进行清理操作，如取消网络请求、取消订阅等
-      // 取消请求
-
     };
   }, []);
 
@@ -142,48 +206,75 @@ export function FundDetailComponent() {
               </div>
             </div>
 
-           {donationList.map((donation, index) => (
-               <div key={index}>
-                  <dt className="text-sm font-semibold leading-6 text-gray-600">{donation.username}: {donation.amount}</dt>
-               </div>
-            ))}
+            <h2 className="mt-8 mb-4 text-xl font-bold tracking-tight text-gray-900 sm:text-xl">Donations</h2>
 
-            <div className="mt-10 gap-8 max-w-md h-6 bg-gray-200 rounded-full dark:bg-gray-700">
-              <div className="h-6 bg-blue-600 rounded-full dark:bg-blue-500 font-medium text-blue-100 text-center p-0.5 leading-none" style={{
-                    width: '85%'
-                  }}> 85% </div>
-            </div>
+            <DonationList donations={donationList} />
 
-            <dl className="mt-10 grid grid-cols-2 gap-8 border-t border-gray-900/10 pt-10 sm:grid-cols-4">
-              {stats.map((stat, statIdx) => (
-                <div key={statIdx}>
-                  <dt className="text-sm font-semibold leading-6 text-gray-600">{stat.label}</dt>
-                  <dd className="mt-2 text-2xl font-bold leading-10 tracking-tight text-gray-900">{stat.value}</dd>
+            <h2 className="mt-8 mb-4 text-xl font-bold tracking-tight text-gray-900 sm:text-xl">Information</h2>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                  <dt className="truncate text-sm font-medium text-gray-500">Name</dt>
+                  <dd className="mt-1 text-xl font-semibold tracking-tight text-gray-900">{fundDetailData?.projectOwner}</dd>
                 </div>
-              ))}
+
+                <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                  <dt className="truncate text-sm font-medium text-gray-500">Start</dt>
+                  <dd className="mt-1 text-xl font-semibold tracking-tight text-gray-900">{startTime}</dd>
+                </div>
+
+                <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                  <dt className="truncate text-sm font-medium text-gray-500">End</dt>
+                  <dd className="mt-1 text-xl font-semibold tracking-tight text-gray-900">{endTime}</dd>
+                </div>
+
+                <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                  <dt className="truncate text-sm font-medium text-gray-500">Closed</dt>
+                  {projectClosedState ? (
+                      <div>
+                        <dd className="mt-1 text-xl font-semibold tracking-tight text-gray-900">True</dd>
+                      </div>
+                  ) : (
+                      <div>
+                        <dd className="mt-1 text-xl font-semibold tracking-tight text-gray-900">False</dd>
+                      </div>
+                  )}
+                </div>
             </dl>
 
             {isOwner ? (
               // Owner
               <div className="mt-10 flex-col flex max-w-xl">
-                <Button className=" rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <Button className=" rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  onClick={(event) => cancelProjectEther(projectId)}>
                   Cancel Project
                 </Button>
-                <Button className="mt-10 rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                  Finish Project
+                <Button className="mt-10 rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  onClick={(event) => withdrawFundEther(projectId)}>
+                  Withdraw Fund
                 </Button>
               </div>
 
             ) : (
               // Normal User
               <div className="mt-10">
-                <Link
-                    href={{ pathname: '/fund/fund_engage', query: { detail: encodeURIComponent(JSON.stringify(fundDetailData)) }}}
-                    type="button"
-                    className="rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  参与募资
-                </Link>
+                {projectClosedState ? (
+                    <div
+                        className="rounded-md bg-gray-400 px-9 py-4 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      参与募资
+                    </div>
+                ) : (
+                    <div>
+                      <Link
+                          href={{ pathname: '/fund/fund_engage', query: { detail: encodeURIComponent(JSON.stringify(fundDetailData)) }}}
+                          type="button"
+                          className="rounded-md bg-blue-600 px-9 py-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      >
+                        参与募资
+                      </Link>
+                    </div>
+                )}
               </div>
             )}
 
