@@ -2,7 +2,7 @@ import {ethers} from '@axiomesh/axiom'
 import abi from '@/configs/abi.json'
 import {EtherProject} from "@/interfaces/Project";
 
-export const contractAddress = '0xe47EdA2f0803443FF8b402F9C08520A6e3a6D7DD'; // 智能合约地址
+export const contractAddress = '0x668207a9Daaf337F59C3A8190dEeFA794e94da48'; // 智能合约地址
 const contractABI = abi; // 智能合约的ABI
 
 export async function donate(projectId: number, username: string, extra: any) {
