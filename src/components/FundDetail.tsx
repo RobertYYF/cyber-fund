@@ -106,6 +106,11 @@ export function FundDetailComponent() {
   };
 
   useEffect(() => {
+    // 检查登录状态
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      router.push("/auth/login")
+    }
+
     // 创建一个取消令牌
     const cancelTokenSource = axios.CancelToken.source();
 

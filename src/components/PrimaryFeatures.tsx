@@ -12,30 +12,28 @@ import screenshotPayroll from '@/images/screenshots/payroll.png'
 import screenshotReporting from '@/images/screenshots/reporting.png'
 import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
 
+import engageFundImage from '@/images/screenshots/engagefund.png'
+import launchFundImage from '@/images/screenshots/launchfund.png'
+import fundListImage from '@/images/screenshots/fundlist.png'
+
 const features = [
   {
-    title: 'Payroll',
+    title: 'FundPool',
     description:
-      "Keep track of everyone's salaries and whether or not they've been paid. Direct deposit not supported.",
-    image: screenshotPayroll,
+      "Keep track of all fund raising projects.",
+    image: fundListImage,
   },
   {
-    title: 'Claim expenses',
+    title: 'Launch Fundraising',
     description:
-      "All of your receipts organized into one place, as long as you don't mind typing in the data by hand.",
-    image: screenshotExpenses,
+      "Fueling Innovation, Empowering Entrepreneurs or Seek for Help",
+    image: launchFundImage,
   },
   {
-    title: 'VAT handling',
+    title: 'Participate in Fundraising',
     description:
-      "We only sell our software to companies who don't deal with VAT at all, so technically we do all the VAT stuff they need.",
-    image: screenshotVatReturns,
-  },
-  {
-    title: 'Reporting',
-    description:
-      'Easily export your data into an Excel spreadsheet where you can do whatever the hell you want with it.',
-    image: screenshotReporting,
+      "Support the Project or Help the One in Need.",
+    image: engageFundImage,
   },
 ]
 
@@ -79,7 +77,7 @@ export function PrimaryFeatures() {
             How does it work?
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            In Blockchain, it just fucking works.
+            Creating a decentralized and immutable ledger, ensuring transparency, security, and trust.
           </p>
         </div>
         <Tab.Group

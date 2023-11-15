@@ -15,8 +15,7 @@ function SignOutTab({ inputClassName }: { inputClassName: string } ) {
     console.log('sign out')
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('currentUser');
-    router.push('/');
-    router.refresh();
+    router.push('/personal/profile');
   };
 
   return (

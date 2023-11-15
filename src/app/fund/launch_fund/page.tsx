@@ -14,6 +14,7 @@ export default function LaunchFundPage() {
   let currentUser: string | null = null;
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState<boolean>(false);
+  const [createFailed, setCreateFailed] = useState<boolean>(false);
 
   function generateIdFromString(inputString: string): string {
     const hash = crypto.createHash('sha256');
@@ -92,6 +93,9 @@ export default function LaunchFundPage() {
       if (projectId != -1) {
         console.log('Project Creat Success!');
         await createProjectAPI(projectId);
+      } else {
+        setIsCreating(false);
+        setCreateFailed(true);
       }
 
       // 重置表单字段
@@ -137,11 +141,18 @@ export default function LaunchFundPage() {
       setIsCreating(false);
       router.push("/personal/launched_fund")
     } catch (error) {
+      setIsCreating(false);
+      setCreateFailed(true);
       console.error(error);
       console.log('create project failed')
       setCreateError(true)
     }
   }
+
+  useEffect(() => {
+    setCreateFailed(false);
+    setIsCreating(false);
+  }, []);
 
   return (
     <>
@@ -333,6 +344,17 @@ export default function LaunchFundPage() {
                 </div>
               )
             }
+
+            {createFailed ? (
+                <div>
+                    <div className="mb-4 mt-2 text-red-500">Create project failed, please try again.</div>
+                </div>
+              ): (
+                 <div>
+                </div>
+              )
+            }
+
           </div>
         </form>
       </main>

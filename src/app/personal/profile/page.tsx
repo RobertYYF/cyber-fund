@@ -6,6 +6,7 @@ import Web3 from "web3";
 import User from "@/interfaces/User";
 import {useSelector} from "react-redux";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 
 const tabs = [
   { name: 'Profile', href: '/personal/profile', current: true },
@@ -22,7 +23,14 @@ export default function ProfilePage() {
   const [walletAddress, setWalletAddress] = useState('');
   const [currentUser, setCurrentUser] = useState('');
 
+  const router = useRouter();
+
   useEffect(() => {
+    // 检查登录状态
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      router.push("/auth/login");
+    }
+
     setCurrentUser(localStorage.getItem('username') || '');
 
     console.log('currentUser is ', currentUser)

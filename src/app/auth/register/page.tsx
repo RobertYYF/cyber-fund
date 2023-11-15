@@ -5,9 +5,12 @@ import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import {useRouter} from "next/navigation";
 import RegisterForm from "@/components/RegisterForm";
+import React, {useEffect, useState} from "react";
 export default function Register() {
 
   const router = useRouter();
+  const [isFail, setIsFail] = useState<boolean>(false);
+
 
   const handleRegister = async (formData: AuthFormData) => {
 
@@ -26,15 +29,22 @@ export default function Register() {
       const data = await response.json();
 
       if (response.ok) {
+        setIsFail(false);
         console.log('Registration successful:', data);
         router.push("/auth/login");
       } else {
+        setIsFail(true);
         console.error('Registration failed:', data);
       }
     } catch (error) {
+      setIsFail(true);
       console.error('Registration failed:', error);
     }
   };
+
+  useEffect(() => {
+    setIsFail(false);
+  }, []);
 
   return (
     <SlimLayout>
@@ -58,6 +68,15 @@ export default function Register() {
       </p>
 
       <RegisterForm onSubmit={handleRegister}/>
+      {isFail ? (
+          <div>
+              <div className="mb-4 mt-2 text-red-500">Register failed, please try again.</div>
+          </div>
+        ): (
+           <div>
+          </div>
+        )
+      }
     </SlimLayout>
   )
 }

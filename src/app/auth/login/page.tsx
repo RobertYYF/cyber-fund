@@ -7,9 +7,12 @@ import { SlimLayout } from '@/components/SlimLayout'
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 import LoginForm from "@/components/LoginForm";
+import React, {useEffect, useState} from "react";
 export default function Login() {
 
   const router = useRouter();
+  const [isFail, setIsFail] = useState<boolean>(false);
+
   const handleLogin = async (formData: AuthFormData) => {
     console.log('here')
     let name = formData.username
@@ -26,17 +29,24 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
+        setIsFail(false);
         console.log('Login successful:', data);
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', name);
         router.push("/");
       } else {
+        setIsFail(true);
         console.error('Login failed:', data);
       }
     } catch (error) {
+      setIsFail(true);
       console.error('Login failed:', error);
     }
   };
+
+  useEffect(() => {
+    setIsFail(false);
+  }, []);
 
   return (
     <SlimLayout>
@@ -60,6 +70,17 @@ export default function Login() {
       </p>
 
       <LoginForm onSubmit={handleLogin} />
+
+      {isFail ? (
+          <div>
+              <div className="mb-4 mt-2 text-red-500">login failed, please try again.</div>
+          </div>
+        ): (
+           <div>
+          </div>
+        )
+      }
+
     </SlimLayout>
   )
 }

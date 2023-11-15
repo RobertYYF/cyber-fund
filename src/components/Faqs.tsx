@@ -6,53 +6,53 @@ import backgroundImage from '@/images/background-faqs.jpg'
 const faqs = [
   [
     {
-      question: 'Does TaxPal handle VAT?',
+      question: 'What is a blockchain-based fundraising platform?',
       answer:
-        'Well no, but if you move your company offshore you can probably ignore it.',
+        'A blockchain-based fundraising platform utilizes blockchain technology to facilitate transparent and secure fundraising processes.',
     },
     {
-      question: 'Can I pay for my subscription via purchase order?',
-      answer: 'Absolutely, we are happy to take your money in all forms.',
+      question: 'How does a blockchain-based fundraising platform ensure transparency?',
+      answer: 'By leveraging blockchain\'s distributed ledger, all transactions and activities on the platform are recorded and visible to participants, ensuring transparency.',
     },
     {
-      question: 'How do I apply for a job at TaxPal?',
+      question: 'What advantages does blockchain bring to fundraising platforms?',
       answer:
-        'We only hire our customers, so subscribe for a minimum of 6 months and then let’s talk.',
+        'Blockchain provides enhanced security, immutability of data, decentralized control, and increased trust among participants.',
     },
   ],
   [
     {
-      question: 'What was that testimonial about tax fraud all about?',
+      question: 'How does a blockchain-based fundraising platform prevent fraud?',
       answer:
-        'TaxPal is just a software application, ultimately your books are your responsibility.',
+        'Due to blockchain\'s transparent nature and consensus mechanisms, fraudulent activities can be identified and prevented more effectively.',
     },
     {
       question:
-        'TaxPal sounds horrible but why do I still feel compelled to purchase?',
+        'Can individuals track the flow of funds in real-time on a blockchain-based fundraising platform?',
       answer:
-        'This is the power of excellent visual design. You just can’t resist it, no matter how poorly it actually functions.',
+        'Yes, blockchain technology allows donors, beneficiaries, and the public to monitor the movement of funds in real-time, ensuring transparency and accountability.',
     },
     {
       question:
-        'I found other companies called TaxPal, are you sure you can use this name?',
+        'Are transactions on a blockchain-based fundraising platform irreversible?',
       answer:
-        'Honestly not sure at all. We haven’t actually incorporated or anything, we just thought it sounded cool and made this website.',
+        'Yes, once a transaction is recorded on the blockchain, it becomes virtually impossible to alter or delete, ensuring the integrity of the fundraising process.',
     },
   ],
   [
     {
-      question: 'How do you generate reports?',
+      question: 'What role do smart contracts play in a blockchain-based fundraising platform?',
       answer:
-        'You just tell us what data you need a report for, and we get our kids to create beautiful charts for you using only the finest crayons.',
+        'Smart contracts automate and enforce the terms and conditions of fundraising campaigns, eliminating the need for intermediaries and enhancing efficiency.',
     },
     {
-      question: 'Can we expect more inventory features?',
-      answer: 'In life it’s really better to never expect anything at all.',
+      question: 'Can blockchain-based fundraising platforms facilitate global participation?',
+      answer: 'Yes, blockchain\'s decentralized nature enables participation from individuals worldwide, overcoming geographical barriers and expanding the reach of fundraising efforts.',
     },
     {
-      question: 'I lost my password, how do I get into my account?',
+      question: 'How does a blockchain-based fundraising platform protect user privacy?',
       answer:
-        'Send us an email and we will send you a copy of our latest password spreadsheet so you can find your information.',
+        'Blockchain platforms can implement privacy features such as encryption and pseudonymity, safeguarding user data while maintaining transparency within the fundraising process.',
     },
   ],
 ]
