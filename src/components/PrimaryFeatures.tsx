@@ -26,7 +26,7 @@ const features = [
   {
     title: 'Launch Fundraising',
     description:
-      "Fueling Innovation, Empowering Entrepreneurs or Seek for Help",
+      "Fueling Innovation / Seek for Help",
     image: launchFundImage,
   },
   {
