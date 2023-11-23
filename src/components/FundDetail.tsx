@@ -66,7 +66,7 @@ export function FundDetailComponent() {
 
   const fetchDonationEther = async (projectId: string) => {
     const donationList = await getDonationById(projectId);
-    const divisor = 100000000000000000;
+    const divisor = 1000000000000000000;
     // 将捐款金额转换为 number 类型
     donationList?.forEach((donation, index) => {
       console.log('Output number is: ', Number(donation.amount.valueOf()) / divisor)
